@@ -1,0 +1,65 @@
+
+
+https://github.com/Tybo323/CTA-2.1.git
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class BankBalanceApp {
+    private double balance = 0.0;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new BankBalanceApp().createAndShowGUI());
+    }
+
+    private void createAndShowGUI() {
+        JFrame frame = new JFrame("Bank Balance Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 200);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+
+        JLabel balanceLabel = new JLabel("Current Balance: $0.00");
+        JTextField amountField = new JTextField();
+        JButton depositButton = new JButton("Deposit");
+        JButton withdrawButton = new JButton("Withdraw");
+
+        panel.add(new JLabel("Enter Amount:"));
+        panel.add(amountField);
+        panel.add(depositButton);
+        panel.add(withdrawButton);
+        panel.add(balanceLabel);
+
+        depositButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double amount = Double.parseDouble(amountField.getText());
+                balance += amount;
+                balanceLabel.setText("Current Balance: $" + String.format("%.2f", balance));
+                amountField.setText("");
+            }
+        });
+
+        withdrawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double amount = Double.parseDouble(amountField.getText());
+                if (amount <= balance) {
+                    balance -= amount;
+                    balanceLabel.setText("Current Balance: $" + String.format("%.2f", balance));
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Insufficient funds!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                amountField.setText("");
+            }
+        });
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+}
